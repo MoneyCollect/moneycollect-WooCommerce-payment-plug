@@ -1,16 +1,16 @@
-Moneycollect WooCommerce Payment Plug
+Moneycollect WooCommerce Payment Plugin
 =======
 
-1.下载zip插件包
+1.Create a MoneyCollect account and download the plugin package in a .zip format .
 ----
-把文件重命名为：moneycollect-payments-gateway.zip
+Rename the downloaded package to：moneycollect-payments-gateway.zip
 
-2.在wordpress商城安装插件
+2.Install MoneyCollect for WooCommerce on your Wordpress website： Go to your WooCommerce Admin Panel-> Select Plugins-> Select Add New-> Select Upload Plugin-> Select Select File to upload and install.
 ----
-选择下载好的插件安装
+ Select the downloaded plugin package to install.
 ![install](https://user-images.githubusercontent.com/92731686/142347345-c44aacd1-fd4e-4e61-869d-8b16c1c50a28.png)
 
-3.进入设置
+3.Go to WooCommerce settings page
 ----
 
 WooCommerce -> Settings -> Payments -> MoneyCollect Credit Card
@@ -21,7 +21,7 @@ WooCommerce -> Settings -> Payments -> MoneyCollect Credit Card
 ![setting1](https://user-images.githubusercontent.com/92731686/142347903-c7ad7064-8a78-475b-891a-c21981b9c8be.png)
 
 
-4.托管模式交易
+4.Hosted Payment Page
 ---
 ![checkout3](https://user-images.githubusercontent.com/92731686/142348504-a3dc1a29-b80d-49b2-a041-ca3653fd68b1.png)
 
@@ -32,7 +32,7 @@ WooCommerce -> Settings -> Payments -> MoneyCollect Credit Card
 ![checkout2](https://user-images.githubusercontent.com/92731686/142348270-1260b319-67ad-49ec-b8b5-a4f407c0271c.png)
 
 
-4.内嵌模式交易
+4.In-Page Checkout
 ---
 ![checkout4](https://user-images.githubusercontent.com/92731686/142348592-b9956722-9f48-4ed4-a453-c61153adde23.png)
 
