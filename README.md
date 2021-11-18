@@ -5,9 +5,10 @@ Moneycollect WooCommerce Payment Plugin
 ----
 Rename the downloaded package to：moneycollect-payments-gateway.zip
 
-2.Install MoneyCollect for WooCommerce on your Wordpress website： Go to your WooCommerce Admin Panel-> Select Plugins-> Select Add New-> Select Upload Plugin-> Select Select File to upload and install.
+2.Install MoneyCollect for WooCommerce on your Wordpress website：
 ----
- Select the downloaded plugin package to install.
+Go to your WooCommerce Admin Panel-> Select "Plugins"-> Select "Add New"-> Select "Upload Plugin"-> Select "Select File" to upload the downloaded plugin package and install. 
+
 ![install](https://user-images.githubusercontent.com/92731686/142347345-c44aacd1-fd4e-4e61-869d-8b16c1c50a28.png)
 
 3.Go to WooCommerce settings page
@@ -32,14 +33,14 @@ WooCommerce -> Settings -> Payments -> MoneyCollect Credit Card
 ![checkout2](https://user-images.githubusercontent.com/92731686/142348270-1260b319-67ad-49ec-b8b5-a4f407c0271c.png)
 
 
-4.In-Page Checkout
+5.In-Page Checkout
 ---
 ![checkout4](https://user-images.githubusercontent.com/92731686/142348592-b9956722-9f48-4ed4-a453-c61153adde23.png)
 
 ![checkout5](https://user-images.githubusercontent.com/92731686/142348708-da410804-62e0-4f2a-897c-6987060a232a.png)
 
 
-5.Additional testing resources
+6.Additional testing resources
 ---
 There are several test cards you can use to make sure your integration is ready for production. Use them with any CVC, postal code, and future expiration date.
 
