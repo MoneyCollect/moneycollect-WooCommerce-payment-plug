@@ -39,7 +39,7 @@ WooCommerce -> Settings -> Payments -> MoneyCollect Credit Card
 ![checkout5](https://user-images.githubusercontent.com/92731686/142348708-da410804-62e0-4f2a-897c-6987060a232a.png)
 
 
-4.Additional testing resources
+5.Additional testing resources
 ---
 There are several test cards you can use to make sure your integration is ready for production. Use them with any CVC, postal code, and future expiration date.
 
