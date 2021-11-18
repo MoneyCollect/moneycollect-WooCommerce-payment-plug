@@ -1,0 +1,1 @@
+# moneycollect-WooCommerce-payment-plug
