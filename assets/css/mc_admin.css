@@ -1,0 +1,10 @@
+.mc-icon{
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    top: -1px;
+    height: 34px;
+}
+.mc-icon>img{
+    height: 100%;
+}
