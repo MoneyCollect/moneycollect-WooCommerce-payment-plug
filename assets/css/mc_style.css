@@ -1,0 +1,6 @@
+#add_payment_method #payment ul.payment_methods li img.wc-mc-icon-card,
+.woocommerce-checkout #payment ul.payment_methods li img.wc-mc-icon-card{
+    max-height: 28px;
+    padding-left: 3px;
+    margin: 0;
+}
