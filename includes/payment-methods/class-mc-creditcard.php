@@ -261,7 +261,7 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
             'lineItems' => $order_data['lineItems'],
             'paymentMethod' => $pm_id,
             'customerId' =>$this->customer->get_id(),
-            'ip' => $this->fun->get_ip(),
+            'ip' => $this->order->get_customer_ip_address(),
             'notifyUrl' => $base_data['notifyUrl'],
             'returnUrl' => $base_data['returnUrl'],
             'preAuth' => $base_data['preAuth'],
@@ -316,9 +316,9 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
 
         echo '<div id="wc-'.esc_attr( $this->id ).'-cc-form" class="wc-credit-card-form wc-payment-form" style="background:transparent;margin-top:10px">
             <div>'. __('Enter your card number','moneycollect') .'</div>
-            <div id="mc-card-element" class="wc-asiabill-elements-field">
-                <div id="card-element" class="mc-elemen" style="max-height: 44px;margin: 5px 0;"></div>
-                <div id="mc-card-error" role="alert"></div>
+            <div id="moneycollect-card" class="wc-asiabill-elements-field">
+                <div id="moneycollect-card-element" class="mc-elemen" style="max-height: 44px;margin: 5px 0;"></div>
+                <div id="moneycollect-card-error" role="alert"></div>
             </div>
             </div>';
 
@@ -351,7 +351,7 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
         $script_params = [
             'is_checkout' => ( is_checkout() && empty( $_GET['pay_for_order'] ) ) ? 'yes' : 'no', // wpcs: csrf ok.
             'apiKey' => $this->setting->get_pu_key(),
-            'mode' => 'test',
+            'mode' => WC_MC_Payment_Api::MODE,
                 'layout' => [
                     'pageMode' => $this->get_option('form_style'),// 页面风格模式  inner | block
                     'style' => [

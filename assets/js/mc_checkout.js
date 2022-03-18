@@ -95,8 +95,9 @@ jQuery( function( $ ) {
             if ( 'yes' === mc_checkout_params.is_checkout ) {
                 $( document.body ).on( 'updated_checkout', function() {
                     mc_sdk.elementInit("payment_steps",{
-                        formId: 'mc-card-element', // 页面表单id
-                        frameId: 'mc-card-frame', // 生成的IframeId
+                        formWrapperId: 'moneycollect-card-element',
+                        formId: 'moneycollect-card', // 页面表单id
+                        frameId: 'moneycollect-card-frame', // 生成的IframeId
                         mode: mc_checkout_params.mode,
                         customerId: '',
                         autoValidate:false,
