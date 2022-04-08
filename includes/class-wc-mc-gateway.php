@@ -13,7 +13,7 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
     protected $customer;
     protected $fun;
     protected $order;
-    protected $complete_status = ['processing','requires_capture','succeeded'];
+    protected array $complete_status = ['processing','requires_capture','succeeded'];
 
     function __construct($id){
         $this->id = esc_attr(strtolower($id));

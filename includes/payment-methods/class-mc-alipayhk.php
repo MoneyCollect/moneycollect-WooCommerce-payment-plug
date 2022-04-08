@@ -8,7 +8,6 @@ class WC_Gateway_Mc_Alipayhk extends WC_MC_Payment_Gateway
     var $id;
     var $payment_method = 'alipay_hk';
     var $method_title = MONEYCOLLECT_NAME.' Alipay HK';
-    var $is_inline;
 
     public function __construct()   {
         parent::__construct('moneycollect_alipay_hk');

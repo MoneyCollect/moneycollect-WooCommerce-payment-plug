@@ -8,7 +8,7 @@ class WC_MC_Payment_Api  {
     const MODE = 'pro';
     const ENV_PRO = 'https://api.moneycollect.com/api/services/v1';
     const ENV_TEST = 'https://sandbox.moneycollect.com/api/services/v1';
-    const JSSDK = 'https://static.moneycollect.com/jssdk/js/MoneyCollect.js';
+    const JSSDK = 'https://static.moneycollect.com/jssdk/js/MoneyCollect.min.js';
 
     static $header = [
         "Content-type" => "application/json",
