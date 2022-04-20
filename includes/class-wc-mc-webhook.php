@@ -22,6 +22,11 @@ class Wc_Mc_Payment_Webhook extends WC_MC_Payment_Gateway
 
         try{
 
+            if( $this->setting->get_setting('webhook') !== 'yes' ){
+                echo 'success';
+                exit();
+            }
+
             $request_body = file_get_contents( 'php://input' );
 
             $this->logger->info('webhook data',$request_body);
@@ -44,31 +49,26 @@ class Wc_Mc_Payment_Webhook extends WC_MC_Payment_Gateway
                     throw new Exception('"'.$data['orderNo'].'" order status is '.$this->order->get_status());
                 }
 
-                if( $this->setting->get_setting('webhook') === 'yes' ){
+                $payment_id = wc_clean( wp_unslash( $data['id'] ) );
 
-                    $payment_id = wc_clean( wp_unslash( $data['id'] ) );
+                $result = WC_MC_Payment_Api::get_payment($payment_id);
 
-                    $result = WC_MC_Payment_Api::get_payment($payment_id);
+                if( $result['code'] === 'success' ){
 
-                    if( $result['code'] === 'success' ){
+                    $data = $result['data'];
 
-                        $data = $result['data'];
+                    $this->logger->info('webhook get payment result ',$data);
 
-                        $this->logger->info('webhook get payment result ',$data);
+                    $rs = $this->checkout_payment($data,'Webhook');
 
-                        $rs = $this->checkout_payment($data,'Webhook');
+                    $this->logger->info('checkout payment webhook',$rs);
 
-                        $this->logger->info('checkout payment webhook',$rs);
-
-                        if( $rs !== true ){
-                            throw new Exception('Unknown order status');
-                        }
-                    }else{
-                        throw new Exception('Unknown Payment id '.$payment_id);
+                    if( $rs !== true ){
+                        throw new Exception('Unknown order status');
                     }
-
+                }else{
+                    throw new Exception('Unknown Payment id '.$payment_id);
                 }
-
 
             }
 
@@ -77,7 +77,7 @@ class Wc_Mc_Payment_Webhook extends WC_MC_Payment_Gateway
         }catch (\Exception $e){
             $mes = $e->getMessage();
             $this->logger->error('webhook error', $mes);
-            echo $mes;
+            echo 'success';
         }
 
         exit();

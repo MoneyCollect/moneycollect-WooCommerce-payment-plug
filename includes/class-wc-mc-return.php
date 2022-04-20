@@ -52,8 +52,8 @@ class WC_Mc_Payment_Return extends WC_MC_Payment_Gateway
                 }
 
                 if( $this->setting->get_setting('webhook') === 'no' ){
-                    $rs = $this->checkout_payment($data,'Browser');
-                    $this->logger->info('checkout payment browser',$rs);
+                    $rs = $this->checkout_payment($data,'Sync');
+                    $this->logger->info('checkout payment sync',$rs);
                 }
 
                 if( in_array($data['status'] , $this->complete_status) ){
@@ -80,7 +80,7 @@ class WC_Mc_Payment_Return extends WC_MC_Payment_Gateway
             $message = $e->getMessage();
             $this->logger->error('return error',$message);
             wc_add_notice( $message, 'error' );
-            wp_safe_redirect( wc_get_checkout_url() );
+            wp_safe_redirect( $this->order->get_checkout_payment_url() );
             exit();
         }
 

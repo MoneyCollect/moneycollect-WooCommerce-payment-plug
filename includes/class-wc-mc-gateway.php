@@ -13,7 +13,7 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
     protected $customer;
     protected $fun;
     protected $order;
-    protected array $complete_status = ['processing','requires_capture','succeeded'];
+    protected $complete_status = ['processing','requires_capture','succeeded']; #用于判断支付是否完成
 
     function __construct($id){
         $this->id = esc_attr(strtolower($id));
@@ -224,7 +224,9 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
 
         $note = '<b>' . __('Source','moneycollect') . '</b> : '. $type . "\r\n";
         $note .= '<b>' . __('Payment','moneycollect') . '</b> : '.MONEYCOLLECT_NAME."\r\n";
-        $note .= '<b>' . __('Type','moneycollect') . '</b> : '. $data['paymentMethodDetails']['type'];
+        if( isset($data['paymentMethodDetails']['type']) ){
+            $note .= '<b>' . __('Type','moneycollect') . '</b> : '. $data['paymentMethodDetails']['type'];
+        }
         if( $data['paymentMethodDetails']['type'] === 'card' ){
             $note .= '('. $data['paymentMethodDetails']['card']['brand'] .')';
         }
@@ -252,7 +254,7 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
             $this->order->payment_complete($data['id']);
         }
 
-        return true;
+        return $new_status;
 
     }
 

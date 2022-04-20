@@ -282,13 +282,23 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
             $this->logger->info('create payment result',$result);
 
             if( $result['code'] === 'success' ){
+
                 $this->customer->clear_cache();
                 $data = $result['data'];
+
+                if( $this->setting->get_setting('webhook') === 'no' ){
+                    $rs = $this->checkout_payment($data,'Sync');
+                    $this->logger->info('checkout payment sync',$rs);
+                }
 
                 if( isset($data['nextAction']) && $data['nextAction']['type'] == 'redirect' ){
                     $redirect = $data['nextAction']['redirectToUrl'];
                     $this->order->add_order_note(__('Redirect to 3D page'));
-                }else{
+                }
+                elseif ($data['status'] == 'failed'){
+                    throw new Exception($data['errorMessage']);
+                }
+                else{
                     $redirect = add_query_arg( 'payment_id', $data['id'], $this->get_return_url( $this->order ) );
                 }
 
@@ -350,6 +360,7 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
     protected function javascript_params(){
         $script_params = [
             'is_checkout' => ( is_checkout() && empty( $_GET['pay_for_order'] ) ) ? 'yes' : 'no', // wpcs: csrf ok.
+            'orderPayPage' => is_checkout_pay_page(),
             'apiKey' => $this->setting->get_pu_key(),
             'mode' => WC_MC_Payment_Api::MODE,
                 'layout' => [
@@ -368,6 +379,37 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
                     ],
                 ],
         ];
+
+        global $wp;
+
+        // If we're on the pay page we need to pass stripe.js the address of the order.
+        if ( isset( $_GET['pay_for_order'] ) && 'true' === $_GET['pay_for_order'] ) {
+
+            $order_id = wc_clean( $wp->query_vars['order-pay'] ); // wpcs: csrf ok, sanitization ok, xss ok.
+            $order    = wc_get_order( $order_id );
+
+            if ( is_a( $order, 'WC_Order' ) ) {
+                $address = array(
+                    'address' => [
+                        'city' => $order->get_billing_city(),
+                        'country' => $order->get_billing_country(),
+                        'line1' => $order->get_billing_address_1(),
+                        'line2' => $order->get_billing_address_2(),
+                        'postalCode' => $order->get_billing_postcode(),
+                        'state' => $order->get_billing_state()
+                    ],
+                    'email' => $order->get_billing_email(),
+                    'firstName' => $order->get_billing_first_name(),
+                    'lastName' => $order->get_billing_last_name(),
+                    'phone' => $order->get_billing_phone()
+
+                );
+
+                $script_params['billing'] = $address;
+            }
+
+        }
+
         return $script_params;
     }
 

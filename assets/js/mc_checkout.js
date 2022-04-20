@@ -9,7 +9,13 @@ jQuery( function( $ ) {
         return;
     }
 
+
     var wc_moneycollect_form = {
+
+        errMsg: '',
+        orderPayPage: mc_checkout_params.orderPayPage === '1',
+        form: null,
+
         onSubmit: function () {
 
             if( $('#payment_method_moneycollect').is( ':checked' ) ){
@@ -21,37 +27,43 @@ jQuery( function( $ ) {
                 if( token != undefined && token!== 'new' ){
                     // use token
                     return true
-                }else{
+                }
+                else{
 
-                    let customerObj = {
-                        description: '',
-                        email: $( '#billing_email' ).val(),
-                        firstName: $( '#billing_first_name' ).val(),
-                        lastName: $( '#billing_last_name' ).val(),
-                        phone: $( '#billing_phone' ).val()
-                    };
-                    let paymentMethodObj = {
-                        "billingDetails": {
-                            "address": {
-                                "city": $( '#billing_city' ).val(),
-                                "country": $( '#billing_country' ).val(),
-                                "line1": $( '#billing_address_1' ).val(),
-                                "line2": $( '#billing_address_2' ).val(),
-                                "postalCode": $( '#billing_postcode' ).val(),
-                                "state": $( '#billing_state' ).val()
+                    if( wc_moneycollect_form.orderPayPage ){
+                        var paymentMethodObj = {
+                            "billingDetails": mc_checkout_params.billing
+                        }
+                    }else {
+                        let customerObj = {
+                            description: '',
+                            email: $( '#billing_email' ).val(),
+                            firstName: $( '#billing_first_name' ).val(),
+                            lastName: $( '#billing_last_name' ).val(),
+                            phone: $( '#billing_phone' ).val()
+                        };
+                        var paymentMethodObj = {
+                            "billingDetails": {
+                                "address": {
+                                    "city": $( '#billing_city' ).val(),
+                                    "country": $( '#billing_country' ).val(),
+                                    "line1": $( '#billing_address_1' ).val(),
+                                    "line2": $( '#billing_address_2' ).val(),
+                                    "postalCode": $( '#billing_postcode' ).val(),
+                                    "state": $( '#billing_state' ).val()
+                                },
+                                "email": customerObj.email,
+                                "firstName": customerObj.firstName,
+                                "lastName": customerObj.lastName ,
+                                "phone": customerObj.phone
                             },
-                            "email": customerObj.email,
-                            "firstName": customerObj.firstName,
-                            "lastName": customerObj.lastName ,
-                            "phone": customerObj.phone
-                        },
-                    };
+                        };
+                    }
 
                     try {
                         mc_sdk.confirmPaymentMethod({
                             paymentMethod: paymentMethodObj
                         }).then((result) => {
-
                             if( result.data.code === "success" ){
                                 wc_moneycollect_form.form.append(
                                     $( '<input type="hidden" />' )
@@ -79,44 +91,59 @@ jQuery( function( $ ) {
         },
         onError: function () {
             if( this.errMsg.trim() !== '' ){
-                $('#mc-card-error').html('<div class="woocommerce-error " role="alert">'+ this.errMsg +'</div>');
+                $('#moneycollect-card-error').html('<div class="woocommerce-error " role="alert">'+ this.errMsg +'</div>');
             }
             this.errMsg = '';
         },
         reset: function () {
             this.errMsg = '';
             $('input[name=mc_payment_method_id]').remove();
-            $('#mc-card-error').empty();
+            $('#moneycollect-card-error').empty();
         },
         checkoutMcPlace: function () {
             $('#place_order').on('click',this.onSubmit );
         },
         createElements: function () {
-            if ( 'yes' === mc_checkout_params.is_checkout ) {
-                $( document.body ).on( 'updated_checkout', function() {
-                    mc_sdk.elementInit("payment_steps",{
-                        formWrapperId: 'moneycollect-card-element',
-                        formId: 'moneycollect-card', // 页面表单id
-                        frameId: 'moneycollect-card-frame', // 生成的IframeId
-                        mode: mc_checkout_params.mode,
-                        customerId: '',
-                        autoValidate:false,
-                        layout: mc_checkout_params.layout
-                    }).catch((err) => {
-                        console.log( err)
-                    });
-                    wc_moneycollect_form.checkoutMcPlace();
-                });
-            }
+
+            mc_sdk.elementInit("payment_steps",{
+                formWrapperId: 'moneycollect-card-element',
+                formId: 'moneycollect-card', // 页面表单id
+                frameId: 'moneycollect-card-frame', // 生成的IframeId
+                mode: mc_checkout_params.mode,
+                customerId: '',
+                autoValidate:false,
+                layout: mc_checkout_params.layout
+            }).catch((err) => {
+                console.log( err)
+            });
+            wc_moneycollect_form.checkoutMcPlace();
+
         },
         init: function () {
             // checkout page
-            if ( $( 'form.woocommerce-checkout' ).length ) {
+            if( wc_moneycollect_form.orderPayPage ){
+                this.form = $( '#order_review' );
+            }else {
                 this.form = $( 'form.woocommerce-checkout' );
             }
+
+            if( this.form === undefined || this.length === 0){
+                wc_moneycollect_form.errMsg = 'Cannot find form element';
+                wc_moneycollect_form.onError();
+                return;
+            }
+
             this.form.on('change', this.reset);
             this.errMsg = '';
-            this.createElements()
+
+            if( this.orderPayPage ){
+                wc_moneycollect_form.createElements();
+            }else {
+                $( document.body ).on( 'updated_checkout', function() {
+                    wc_moneycollect_form.createElements();
+                });
+            }
+
         },
 
     };
