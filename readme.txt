@@ -4,7 +4,7 @@ Donate link:
 Tags: credit card, bitcoin, cryptocurrencies, crypto, payment gateway, payment request, sofort, giropay, p24, paysafecard, apple pay, google pay, alipay, wechat pay, 支付宝, 微信支付, 收款, 支付, USD, CNY
 Requires at least: 4.7
 Tested up to: 5.8
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 Requires PHP: 7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.zh-cn.html
@@ -28,6 +28,9 @@ https://www.moneycollect.com
 4. The Moneycollect hosted payment page.
 
 == Changelog ==
+= 1.0.9=
+* Fix some problems
+
 = 1.1.8=
 * Refuse to pay again from the order
 

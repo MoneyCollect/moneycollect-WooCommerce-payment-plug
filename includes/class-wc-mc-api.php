@@ -95,7 +95,7 @@ class WC_MC_Payment_Api  {
             'httpversion' => '1.1',
             'sslverify' => true,
             'headers' => self::$header,
-            'body' => json_encode($data) ) );
+            'body' => $method == 'POST'? json_encode($data): $data ) );
 
         if( is_object($result) && property_exists($result,'errors') ){
             return $result->errors['http_request_failed'][0];
