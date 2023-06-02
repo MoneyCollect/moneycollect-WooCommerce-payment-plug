@@ -26,6 +26,7 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
         $this->setting = new WC_MC_Payment_Setting();
         $this->customer = new Wc_Mc_Payment_Customer(get_current_user_id());
         $this->fun = new WC_MC_Payment_Fun();
+        $this->supports = [ 'products', 'refunds' ];
 
         // 保存设置
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array ($this,'process_admin_options') );
@@ -71,7 +72,11 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
     }
 
     public function get_icon(){
-        $img = '<img class="wc-mc-icon-card" src="'.MONEYCOLLECT_URL.'/assets/images/'.$this->payment_method.'.png" alt="'.$this->payment_method.'" />';
+
+        if( $this->setting->get_setting('icon') === 'no' ){
+            return '';
+        }
+        $img = '<img class="wc-mc-icon-card" src="'.MONEYCOLLECT_URL.'/assets/images/'.strtolower($this->payment_method).'.png" alt="'.$this->payment_method.'" />';
         return apply_filters( 'woocommerce_gateway_icon', $img, $this->id );
     }
 
@@ -107,6 +112,81 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
 
     }
 
+    public function process_refund($order_id, $amount = null, $reason = '')
+    {
+        $order = new WC_Order( $order_id );
+
+        if( $amount <= 0 )
+            throw new Exception( __( 'This amount must be greater than 0' ) );
+
+        if ( $reason ) {
+            if ( strlen( $reason ) > 200 ) {
+                $reason = function_exists( 'mb_substr' ) ? mb_substr( $reason, 0, 150 ) : substr( $reason, 0, 150 );
+                // Add some explainer text indicating where to find the full refund reason.
+                $reason = $reason . '... [See WooCommerce order page for full text.]';
+            }
+        }
+
+        $id = $order->get_transaction_id();
+
+        if( $order->get_meta('_moneycollect_charge_captured') == 'yes' ){
+
+            $cancellationReason = empty($reason)? 'customer cancel': $reason;
+
+            $result = WC_MC_Payment_Api::cancel_payment($id,$cancellationReason);
+
+            $this->logger->info('cancel result',$result);
+
+            if($result['code'] != 'success'){
+                throw new Exception( __( $result['msg'] ) );
+            }
+
+            $order->update_status('cancelled',__( 'The authorization was voided and the order cancelled.', 'moneycollect' ));
+            throw new Exception( __( 'The authorization was voided and the order cancelled. Click okay to continue, then refresh the page.', 'moneycollect' ) );
+
+        }
+        else{
+
+            $refund_items = wc_get_orders( array(
+                'type'   => 'shop_order_refund',
+                'parent' => $order_id,
+                'limit'  => -1,
+                'return' => 'ids',
+            ) );
+
+            $refund_id = current($refund_items);
+
+            $refund_data = [
+                'amount' =>  $this->fun->transform_amount($amount,$order->get_currency()),
+                'description' => $refund_id,
+                'note' => $reason,
+                'paymentId' => $id,
+                'reason' => 'requested_by_customer'
+            ];
+
+            $this->logger->info('refund request',$refund_data);
+
+            $result = WC_MC_Payment_Api::create_refund($refund_data);
+
+            $this->logger->info('refund result',$result);
+
+            if($result['code'] != 'success'){
+                throw new Exception( __( $result['msg'] ) );
+            }
+
+            $note = sprintf(__('Refund %1$s via %2$s - Refund ID: %3$s - Reason: %4$s','moneycollect'),
+                $order->get_currency().' '.$amount,
+                $order->get_payment_method_title(),
+                $result['data']['id'],
+                $reason
+            ) ;
+
+            $order->add_order_note($note);
+
+            return true;
+
+        }
+    }
 
     protected function order_data(){
 
@@ -116,7 +196,7 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
 
         $currency = $order->get_currency();
 
-        $order_data  = $order->get_items( [ 'line_item', 'fee' ] ) ;
+        $order_data  = $order->get_items( 'line_item' ) ;
 
         $line_items = [];
 
@@ -124,6 +204,10 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
 
             $data = array_values((array)$item);
             $product = wc_get_product( $data[1]['product_id'] );
+
+            if( empty($product) ){
+                continue;
+            }
 
             $amount = $data['1']['quantity'] > 0 ? $this->fun->transform_amount( $data['1']['subtotal'] / $data['1']['quantity'],$currency ) : 0;
             $images = wp_get_attachment_url( $product->get_image_id() )?:'';
@@ -231,15 +315,13 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
             $note .= '('. $data['paymentMethodDetails']['card']['brand'] .')';
         }
         $note .= "\r\n";
-
         $note .= '<b>' . __('Transaction','moneycollect') . '</b> : '.$data['id'] ."\r\n";
         $note .= '<b>' . __('Status','moneycollect') . '</b> : '.$data['status'] ."\r\n";
+
 
         if( $data['errorMessage'] ){
             $note .= '<b>' . __('Message','moneycollect') . '</b> : '.$data['errorMessage'] ."\r\n";
         }
-
-        $this->order->add_order_note($note);
 
         $new_status = $this->fun->get_status_update($data['status']);
 
@@ -248,14 +330,22 @@ abstract class WC_MC_Payment_Gateway extends WC_Payment_Gateway_CC {
             return false;
         }
 
-        $this->order->update_status($new_status);
+        $captured = ($this->setting->get_setting('pre_auth') === 'yes' && $data['status'] == 'requires_capture' ) ? 'yes' : 'no';
+        $this->order->update_meta_data('_moneycollect_charge_captured',$captured);
 
         if( $new_status === 'processing' ){
             $this->order->payment_complete($data['id']);
         }
+        elseif($new_status === 'on-hold'){
+            $this->order->set_transaction_id( $data['id'] );
+            $this->order->update_status($new_status);
+        }
+        else{
+            $this->order->update_status($new_status);
+        }
 
+        $this->order->add_order_note($note);
         return $new_status;
-
     }
 
 }

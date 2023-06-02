@@ -22,8 +22,6 @@ class WC_Mc_Payment_Return extends WC_MC_Payment_Gateway
 
             $payment_id = wc_clean( wp_unslash( $_GET['payment_id'] ) );
 
-            $this->logger->info('return payment',$payment_id);
-
             $result = WC_MC_Payment_Api::get_payment($payment_id);
 
             if( $result['code'] === 'success' ){

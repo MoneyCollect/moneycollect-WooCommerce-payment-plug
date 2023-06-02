@@ -3,7 +3,7 @@
  * Plugin Name: Moneycollect Payment Gateway for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/monetcollect-payments-gateway/
  * Description: Moneycollect Payment
- * Version: 1.1.9
+ * Version: 1.2.00
  * Tested up to: 5.8
  * Required PHP version: 7.0
  * Author: MoneyCollect
@@ -17,10 +17,34 @@ if (! defined ( 'ABSPATH' ))
     exit (); // Exit if accessed directly
 
 const MONEYCOLLECT_NAME = 'Moneycollect';
-const MONEYCOLLECT_VERSION = '1.1.9';
+const MONEYCOLLECT_VERSION = '1.2.00';
 const MONEYCOLLECT_METHOD = [
+    'alipay',
+    'alipayhk',
+    'bancontact',
+    'boleto',
     'creditcard',
-    'alipayhk'
+    'dana',
+    'enets',
+    'eps',
+    'fpx',
+    'gcash',
+    'giropay',
+    'ideal',
+    'kakaopay',
+    'klarna',
+    'konbini',
+    'mybank',
+    'payeasy',
+    'paysafecard',
+    'payu',
+    'pix',
+    'poli',
+    'przelewy24',
+    'sofort',
+    'tng',
+    'truemoney',
+    'wechatpay',
 ];
 define('MONEYCOLLECT_DIR',rtrim(plugin_dir_path(__FILE__),'/'));
 define('MONEYCOLLECT_URL',rtrim(plugin_dir_url(__FILE__),'/'));

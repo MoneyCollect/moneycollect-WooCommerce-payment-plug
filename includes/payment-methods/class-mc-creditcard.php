@@ -25,10 +25,7 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
         parent::__construct('moneycollect');
         $this->method_description = sprintf( __( 'If you don\'t have an account, please click <a target="_blank" href="%s">register</a>', 'moneycollect' ),'https://portal.moneycollect.com/register' );
         $this->is_inline = $this->get_option('checkout_model') === '1' ? 'yes' : 'no';
-        $this->has_fields = $this->is_inline === 'yes'?true:false;
-        $this->supports = [
-            'products',
-        ];
+        $this->has_fields = $this->is_inline === 'yes';
 
         if( $this->is_inline === 'yes' ){
             $this->supports[] = 'tokenization';
@@ -155,6 +152,16 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
                 'default' => 'no',
                 'desc_tip' => true,
             ],
+
+            'icon' =>[
+                'title' => __ ( 'Icon', 'moneycollect' ),
+                'label' => __ ( 'Display Icon', 'moneycollect' ),
+                'type' => 'checkbox',
+                'description' => __ ( 'Display icon for payment method.', 'moneycollect' ),
+                'default' => 'yes',
+                'desc_tip' => true,
+            ],
+
         ];
         foreach ($this->icon_card as $key => $val){
             $this->form_fields[$key] = [
@@ -169,7 +176,9 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
     }
 
     public function get_icon(){
-
+        if( $this->setting->get_setting('icon') === 'no' ){
+            return '';
+        }
         $img = '';
         foreach ($this->icon_card as $key => $value){
             if( $this->get_option($key) === 'yes' ){
@@ -196,9 +205,9 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
             return parent::process_payment($order_id);
         }
 
-        $use_token = ( isset($_POST['wc-'.$this->id.'-payment-token']) && $_POST['wc-'.$this->id.'-payment-token'] != 'new' )? true: false;
-        $new_card = isset($_POST['mc_payment_method_id'])? true: false;
-        $save_card = isset($_POST['wc-'.$this->id.'-new-payment-method'])? true: false;
+        $use_token = isset( $_POST['wc-'.$this->id.'-payment-token']) && $_POST['wc-'.$this->id.'-payment-token'] != 'new';
+        $new_card = isset( $_POST['mc_payment_method_id']);
+        $save_card = isset( $_POST['wc-'.$this->id.'-new-payment-method']);
 
         $this->order = new WC_Order($order_id);
 
@@ -214,7 +223,6 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
         else if( $new_card ){
             $pm_id = sanitize_text_field($_POST['mc_payment_method_id']);
         }
-
 
         // 无效的id
         if( empty($pm_id) ){
@@ -317,6 +325,11 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
 
     }
 
+    function process_refund($order_id, $amount = null, $reason = '')
+    {
+        return parent::process_refund($order_id, $amount, $reason);
+    }
+
     protected function elements_form(){
 
         // 保存的卡
@@ -327,7 +340,7 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
         echo '<div id="wc-'.esc_attr( $this->id ).'-cc-form" class="wc-credit-card-form wc-payment-form" style="background:transparent;margin-top:10px">
             <div>'. __('Enter your card number','moneycollect') .'</div>
             <div id="moneycollect-card" class="wc-asiabill-elements-field">
-                <div id="moneycollect-card-element" class="mc-elemen" style="max-height: 44px;margin: 5px 0;"></div>
+                <div id="moneycollect-card-element" class="mc-elemen" style="mini-height: 44px;margin: 5px 0;"></div>
                 <div id="moneycollect-card-error" role="alert"></div>
             </div>
             </div>';
@@ -362,6 +375,7 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
             'is_checkout' => ( is_checkout() && empty( $_GET['pay_for_order'] ) ) ? 'yes' : 'no', // wpcs: csrf ok.
             'orderPayPage' => is_checkout_pay_page(),
             'apiKey' => $this->setting->get_pu_key(),
+			'lang' => $this->fun->to_locale(get_locale()),
             'mode' => WC_MC_Payment_Api::MODE,
                 'layout' => [
                     'pageMode' => $this->get_option('form_style'),// 页面风格模式  inner | block
@@ -412,6 +426,4 @@ class WC_Gateway_Mc_Creditcard extends WC_MC_Payment_Gateway
 
         return $script_params;
     }
-
-
 }

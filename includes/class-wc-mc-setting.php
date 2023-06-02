@@ -13,6 +13,9 @@ class WC_MC_Payment_Setting  {
     }
 
     public function get_setting( $key = '' ){
+        if( $this->setting === false ){
+            return null;
+        }
         if( !empty($key) && key_exists($key,$this->setting) ){
             return $this->setting[$key];
         }

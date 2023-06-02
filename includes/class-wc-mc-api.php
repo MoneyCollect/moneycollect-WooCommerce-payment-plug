@@ -35,6 +35,11 @@ class WC_MC_Payment_Api  {
         return self::request($data,$api);
     }
 
+    public static function cancel_payment ($id,$reason) {
+        $api = self::get_env().'/payment/'.$id.'/cancel?cancellationReason='.$reason;
+        return self::request([],$api);
+    }
+
     public static function get_payment ($id = '') {
         $api = self::get_env().'/payment/'.$id;
         return self::request([],$api,'GET');
@@ -61,15 +66,20 @@ class WC_MC_Payment_Api  {
 
     public static function del_payment_method ($payment_id) {
         $api = self::get_env().'/payment_methods/'.$payment_id.'/detach';
-        return self::request([],$api,'POST');
+        return self::request([],$api);
     }
 
-    protected function add_pr_key(){
+    public static function create_refund ($data) {
+        $api = self::get_env().'/refunds/create';
+        return self::request($data,$api);
+    }
+
+    public static function add_pr_key(){
         $setting = new WC_MC_Payment_Setting();
         self::add_header('Authorization',$setting->get_pr_key());
     }
 
-    protected function get_env(){
+    public static function get_env(){
 
         $setting = new WC_MC_Payment_Setting();
         if( $setting->get_setting('test_model') === 'yes' ){
@@ -80,20 +90,16 @@ class WC_MC_Payment_Api  {
 
     }
 
-    protected function add_header($key,$val){
+    public static function add_header($key,$val){
         self::$header[$key] = $val;
     }
 
-    protected function request ($data,$api,$method = 'POST') {
+    public static function request ($data,$api,$method = 'POST') {
 
         self::add_pr_key();
-
-        $result = wp_remote_head( $api, array(
+        $result = wp_remote_request( $api, array(
             'method' => $method, // Request method. Accepts 'GET', 'POST', 'DELETE'
             'timeout' => '60', // How long the connection should stay open in seconds.
-            //'blocking' => false,
-            'httpversion' => '1.1',
-            'sslverify' => true,
             'headers' => self::$header,
             'body' => $method == 'POST'? json_encode($data): $data ) );
 

@@ -15,24 +15,25 @@ class WC_MC_Payment_Fun  {
     function transform_amount($amount,$currency){
         switch ($currency){
             case strpos('CLP,ISK,VND,KRW,JPY',$currency) !== false:
-                return (int)$amount;
-                break;
+                return $amount;
             case strpos('IQD,KWD,TND',$currency) !== false:
                 return (int)($amount*1000);
-                break;
             default:
                 return (int)($amount*100);
-                break;
         }
     }
 
-    function analysis_url($url,$key = 'basename'){
-        if( !$url ){
-            return $url;
+    function reduction_amount($amount,$currency){
+        switch ($currency){
+            case strpos('CLP,ISK,VND,KRW,JPY',$currency) !== false:
+                return $amount;
+            case strpos('IQD,KWD,TND',$currency) !== false:
+                return round(($amount/1000),4);
+            default:
+                return round(($amount/100),2);
         }
-        $data = pathinfo($url);
-        $data[$key];
     }
+
 
     function get_status_update($status){
         switch ( $status ){
@@ -43,6 +44,7 @@ class WC_MC_Payment_Fun  {
                 $new_status = 'failed';
                 break;
             case 'requires_payment_method':
+            case 'requires_capture':
             case 'requires_confirmation':
             case 'requires_action':
             case 'processing':
@@ -72,5 +74,34 @@ class WC_MC_Payment_Fun  {
         return $cip;
     }
 
+    function to_locale($wc_locale){
 
+        switch($wc_locale){
+            case 'ko_KR':
+                return 'ko';
+            case 'zh_TW':
+            case 'zh_HK':
+                return 'ch_TW';
+            case 'pt_BR':
+                return 'pt_Br';
+            case 'pt_PT':
+                return 'pt_pt';
+            case 'ru_RU':
+                return 'ru';
+            case 'ja':
+                return $wc_locale;
+        }
+
+        $base_locale = substr( $wc_locale, 0, 2 );
+        switch($base_locale){
+            case 'es':
+            case 'de':
+            case 'fr':
+            case 'it':
+                return 'pt_'.$base_locale;
+        }
+
+        return 'en';
+
+    }
 }

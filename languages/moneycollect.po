@@ -5,247 +5,284 @@ msgstr ""
 "Project-Id-Version: WooCommerce Monet Collect\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-POT-"
 "Creation-Date: 2021-08-10 15:04+0800\n"
-"POT-Creation-Date: 2021-10-21 16:54+0800\n"
-"PO-Revision-Date: 2021-10-21 16:54+0800\n"
+"POT-Creation-Date: 2023-05-25 11:01+0800\n"
+"PO-Revision-Date: 2023-05-25 11:01+0800\n"
 "Last-Translator: \n"
 "Language-Team: moneycollect\n"
 "Language: mime\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.3.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: includes/class-wc-mc-gateway.php:43
-#: includes/payment-methods/class-mc-creditcard.php:47
+#: includes/class-wc-mc-gateway.php:20
+#, php-format
+msgid ""
+"All other general Moneycollect settings can be adjusted <a href=\"%s\">here</"
+"a>"
+msgstr ""
+
+#: includes/class-wc-mc-gateway.php:47
+#: includes/payment-methods/class-mc-creditcard.php:44
 msgid "Enable/Disable"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:45
-#: includes/payment-methods/class-mc-creditcard.php:49
+#: includes/class-wc-mc-gateway.php:49
+#: includes/payment-methods/class-mc-creditcard.php:46
 msgid "Enable Payment"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:49
-#: includes/payment-methods/class-mc-creditcard.php:53
+#: includes/class-wc-mc-gateway.php:53
+#: includes/payment-methods/class-mc-creditcard.php:50
 msgid "Title"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:51
-#: includes/payment-methods/class-mc-creditcard.php:55
+#: includes/class-wc-mc-gateway.php:55
+#: includes/payment-methods/class-mc-creditcard.php:52
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:56
-#: includes/payment-methods/class-mc-creditcard.php:60
+#: includes/class-wc-mc-gateway.php:60
+#: includes/payment-methods/class-mc-creditcard.php:57
 msgid "Description"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:58
-#: includes/payment-methods/class-mc-creditcard.php:62
+#: includes/class-wc-mc-gateway.php:62
+#: includes/payment-methods/class-mc-creditcard.php:59
 msgid "This controls the description which the user sees during checkout."
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:89
-#: includes/payment-methods/class-mc-creditcard.php:294
+#: includes/class-wc-mc-gateway.php:106
+#: includes/payment-methods/class-mc-creditcard.php:310
 msgid "There was an accident"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:191
+#: includes/class-wc-mc-gateway.php:116
+msgid "This amount must be greater than 0"
+msgstr ""
+
+#: includes/class-wc-mc-gateway.php:140
+msgid "The authorization was voided and the order cancelled."
+msgstr ""
+
+#: includes/class-wc-mc-gateway.php:141
+msgid ""
+"The authorization was voided and the order cancelled. Click okay to "
+"continue, then refresh the page."
+msgstr ""
+
+#: includes/class-wc-mc-gateway.php:173
+#, php-format
+msgid "Refund %1$s via %2$s - Refund ID: %3$s - Reason: %4$s"
+msgstr ""
+
+#: includes/class-wc-mc-gateway.php:294
 #, php-format
 msgid ""
 "Tick Webhook Endpoints %s will enable you to receive notifications on the "
-"charge statuses. <br/>If your cannot receive notifications on the charge "
+"charge statuses. <br/>If you cannot receive notifications on the charge "
 "statuses，you need to disbale Webhook Endpoints and then browser will "
 "process the change of your statuses."
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:202
+#: includes/class-wc-mc-gateway.php:305
 msgid "Source"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:203
+#: includes/class-wc-mc-gateway.php:306
 msgid "Payment"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:204
+#: includes/class-wc-mc-gateway.php:308
 msgid "Type"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:210
+#: includes/class-wc-mc-gateway.php:314
 msgid "Transaction"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:211
+#: includes/class-wc-mc-gateway.php:315
 msgid "Status"
 msgstr ""
 
-#: includes/class-wc-mc-gateway.php:214
+#: includes/class-wc-mc-gateway.php:319
 msgid "Message"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:25
+#: includes/class-wc-mc-webhook.php:100
 #, php-format
 msgid ""
-"If you don't have an account, please click <a target=\"_blank\" href=\"%s"
-"\">register</a>"
+"Refund received from MoneyCollect, Refund Amount: %1$s - Refund ID: %2$s "
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:66
+#: includes/class-wc-mc-webhook.php:115
+#, php-format
+msgid "%1$s Refund failed - failureReason: %1$s"
+msgstr ""
+
+#: includes/payment-methods/class-mc-creditcard.php:26
+#, php-format
+msgid ""
+"If you don't have an account, please click <a target=\"_blank\" "
+"href=\"%s\">register</a>"
+msgstr ""
+
+#: includes/payment-methods/class-mc-creditcard.php:63
 msgid "Enable Test Mode"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:68
+#: includes/payment-methods/class-mc-creditcard.php:65
 msgid "Place the payment gateway in test mode using test API keys."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:74
+#: includes/payment-methods/class-mc-creditcard.php:71
 msgid "Test Public Key"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:76
+#: includes/payment-methods/class-mc-creditcard.php:73
 msgid ""
 "Get your API keys from your MoneyCollect account. Invalid values will be "
 "rejected. Only values starting with \"test_pu_\" will be saved."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:80
+#: includes/payment-methods/class-mc-creditcard.php:77
 msgid "Test Private Key"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:82
+#: includes/payment-methods/class-mc-creditcard.php:79
 msgid ""
 "Get your API keys from your MoneyCollect account. Invalid values will be "
 "rejected. Only values starting with \"test_pr_\" will be saved."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:86
+#: includes/payment-methods/class-mc-creditcard.php:83
 msgid "Live Public Key"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:88
+#: includes/payment-methods/class-mc-creditcard.php:85
 msgid ""
 "Get your API keys from your MoneyCollect account. Invalid values will be "
 "rejected. Only values starting with \"live_pu_\" will be saved."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:92
+#: includes/payment-methods/class-mc-creditcard.php:89
 msgid "Live Private Key"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:94
+#: includes/payment-methods/class-mc-creditcard.php:91
 msgid ""
 "Get your API keys from your MoneyCollect account. Invalid values will be "
 "rejected. Only values starting with \"live_pr_\" will be saved."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:99
+#: includes/payment-methods/class-mc-creditcard.php:96
 msgid "Webhook Endpoints"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:105
+#: includes/payment-methods/class-mc-creditcard.php:102
 msgid "Pre auth"
 msgstr ""
 
+#: includes/payment-methods/class-mc-creditcard.php:103
 #: includes/payment-methods/class-mc-creditcard.php:106
-#: includes/payment-methods/class-mc-creditcard.php:109
 msgid "Open pre auth"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:113
+#: includes/payment-methods/class-mc-creditcard.php:110
 msgid "Statement Descriptor"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:115
+#: includes/payment-methods/class-mc-creditcard.php:112
 msgid ""
 "Statement descriptors only supports 5-22 alphanumeric characters, spaces, "
 "and these special characters: & , . - #, and it must contain at least one "
 "letter."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:120
+#: includes/payment-methods/class-mc-creditcard.php:117
 msgid "Checkout model"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:122
+#: includes/payment-methods/class-mc-creditcard.php:119
 msgid "Select the checkout model."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:126
+#: includes/payment-methods/class-mc-creditcard.php:123
 msgid "In-page Checkout"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:127
+#: includes/payment-methods/class-mc-creditcard.php:124
 msgid "Hosted Payment Page"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:131
+#: includes/payment-methods/class-mc-creditcard.php:128
 msgid "Form style"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:133
+#: includes/payment-methods/class-mc-creditcard.php:130
 msgid "Select the form_style."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:137
+#: includes/payment-methods/class-mc-creditcard.php:134
 msgid "One row"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:138
+#: includes/payment-methods/class-mc-creditcard.php:135
 msgid "Two rows"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:142
+#: includes/payment-methods/class-mc-creditcard.php:139
 msgid "Saved Cards"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:143
+#: includes/payment-methods/class-mc-creditcard.php:140
 msgid "Enable Payment via Saved Cards"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:145
+#: includes/payment-methods/class-mc-creditcard.php:142
 msgid ""
 "If enabled, users will be able to pay with a saved card during checkout. "
 "Card details are saved on MoneyCollect servers, not on your store."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:151
+#: includes/payment-methods/class-mc-creditcard.php:148
 msgid "Logging"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:152
+#: includes/payment-methods/class-mc-creditcard.php:149
 msgid "The log messages are saved at "
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:154
+#: includes/payment-methods/class-mc-creditcard.php:151
 msgid "Save debug messages to the WooCommerce System Status log."
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:164
+#: includes/payment-methods/class-mc-creditcard.php:161
 #, php-format
 msgid "Show %s logo"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:190
+#: includes/payment-methods/class-mc-creditcard.php:181
 msgid "New payment methods can only be added during checkout"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:228
+#: includes/payment-methods/class-mc-creditcard.php:218
 msgid "Invalid payment method"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:279
+#: includes/payment-methods/class-mc-creditcard.php:291
 msgid "Redirect to 3D page"
 msgstr ""
 
-#: includes/payment-methods/class-mc-creditcard.php:307
+#: includes/payment-methods/class-mc-creditcard.php:328
 msgid "Enter your card number"
 msgstr ""
 
-#: money-collect-payment-gateway.php:61
+#: moneycollect-payment-gateway.php:62
 msgid "Settings"
 msgstr ""

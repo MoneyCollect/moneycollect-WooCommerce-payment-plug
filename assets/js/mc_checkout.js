@@ -112,6 +112,7 @@ jQuery( function( $ ) {
                 mode: mc_checkout_params.mode,
                 customerId: '',
                 autoValidate:false,
+                lang: mc_checkout_params.lang,
                 layout: mc_checkout_params.layout
             }).catch((err) => {
                 console.log( err)
